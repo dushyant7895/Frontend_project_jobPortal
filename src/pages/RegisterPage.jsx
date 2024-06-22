@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 
 import { Register } from "../api/User";
-
+import {useNavigate,Navigate} from 'react-router-dom';
 
 const RegisterPage = () => {
     const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobile,setMobile] = useState("");
   const [name, setName] = useState("");
+  const [showLoginRedirect, setShowLoginRedirect] = useState(false);
   
 
   const handleRegister = async () => {
@@ -18,8 +19,11 @@ const RegisterPage = () => {
        
       // Handle successful login (e.g., redirect, store tokens)
       console.log("Login successful:", response.data); // Log response for debugging purposes
-      // TODO: Implement your logic for handling successful login
+      console.log("Status is", response.status);
 
+      if(response.status === 201){
+        setShowLoginRedirect(true);
+      }
   };
   return (
     <div>
@@ -51,6 +55,7 @@ const RegisterPage = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleRegister}>Login</button>
+      {showLoginRedirect && <Navigate to='/login' />}
     </div>
   )
 }
