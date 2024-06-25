@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { fetchJob } from '../api/Job';
+import { fetchJob, fetchJobByQuery } from '../api/Job';
+import Header from '../components/Header';
 const HomePage = () => {
 
   const [jobs,setJobs]= useState([]);
@@ -12,7 +13,11 @@ const HomePage = () => {
   },[]);
 
   const handleFetchJob =async()=>{
-    const response = await fetchJob();
+   const query={
+    minSalary:0,
+    maxSalary:999999999
+   }
+    const response = await fetchJobByQuery(query);
     if(response.status === 200)
       {
         setJobs(response.data.jobs);
@@ -24,6 +29,7 @@ const HomePage = () => {
 
   return (
     <div>
+    <Header />
     <h1>This is a Home Page</h1>
     {jobs.map((job, index) => (
       <div key={index}>

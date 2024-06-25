@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Register } from "../api/User";
+import { Login } from "../api/User";
 import { Navigate } from 'react-router-dom';
 
 const RegisterPage = () => {
@@ -19,9 +20,15 @@ const RegisterPage = () => {
     console.log("Status is", response.status);
 
     if (response.status === 201) {
-      localStorage.setItem("password", password);
-      localStorage.setItem("email", email);
-      setShowLoginRedirect(true);
+      const loginResponse = await Login(email,password);
+      if(loginResponse.status===200)
+        {
+          const {data} =loginResponse;
+          const {token} = data;
+          localStorage.setItem('token',token);
+          console.log(token);
+          setShowLoginRedirect(true);
+        }
     }
   };
 
@@ -55,7 +62,7 @@ const RegisterPage = () => {
         />
         <button type="submit">Register user</button>
       </form>
-      {showLoginRedirect && <Navigate to='/login' />}
+      {showLoginRedirect && <Navigate to='/' />}
     </div>
   );
 };
