@@ -2,23 +2,28 @@ import React, { useEffect, useState } from 'react'
 import { fetchJob, fetchJobByQuery } from '../api/Job';
 import Header from '../components/Header';
 import QueryWidget from '../components/QueryWidget';
+import JobCard from './JobCard';
 
 const HomePage = () => {
 
   const [jobs,setJobs]= useState([]);
-  const altImage="https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png"
-
+  const [query, setQuery]= useState({
+    title:"",
+    skills:[]
+  });
+ 
   useEffect(()=>{
   //const token= localStorage.getItem("token");
  // console.log("Token is->",token);
  handleFetchJob();
   },[]);
 
+  useEffect(()=>{
+    console.log(query);
+  },[query]);
+
   const handleFetchJob =async()=>{
-   const query={
-    minSalary:0,
-    maxSalary:999999999
-   }
+   
     const response = await fetchJobByQuery(query);
     if(response.status === 200)
       {
@@ -32,17 +37,10 @@ const HomePage = () => {
   return (
     <div>
     <Header />
-    <QueryWidget />
+    <QueryWidget query={query} setQuery={setQuery} handleFetchJob={handleFetchJob}/>
     <h1>This is a Home Page</h1>
     {jobs.map((job, index) => (
-      <div key={index}>
-        <div>{job.companyName}</div>
-        <h4>{job.monthlySalary}</h4>
-        <h4>{job.jobType}</h4>
-        
-        <img src={job.logoUrl} width={"100px"} height={"100px"} alt={altImage} />
-        <hr />
-      </div>
+      <JobCard job={job} key={index} />
     ))}
   </div>
   )

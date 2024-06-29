@@ -10,16 +10,13 @@ const fetchJob =async()=>{
         return error.response.data;
     }
 }
-const fetchJobByQuery = async(
-    title,
-    minSalary=0, 
-    maxSalary=9999999,
-    jobType, location,skills)=>{
+const fetchJobByQuery = async(query)=>{
+    const {title, skills}=query;
     try {
         const response  = await axios.get(`${BACKEND_URL}/job`,{
             params:{
-                minSalary,
-                maxSalary,
+               title,
+               skills
             }
         });
         return response;
